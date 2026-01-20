@@ -2,6 +2,7 @@ import { data } from "@/db/data";
 
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
+import { SelectContent, Select, SelectTrigger, SelectValue, SelectItem, SelectGroup } from "./ui/select";
 
 function Calculator() {
   const [selectedCityFrom, setSelectedCityFrom] = useState<string>("");
@@ -11,7 +12,7 @@ function Calculator() {
   const [price, setPrice] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isAreaCity, setIsAreaCity] = useState<boolean>(false);
-
+  const cities = Object.keys(data);
 
   useEffect(() => {
     if (isAreaCity && selectedCityFrom === "Варна") {
@@ -75,18 +76,26 @@ function Calculator() {
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Град</label>
-            <input
-              type="text"
-              className="w-full py-2 px-3 rounded-xl border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="например: Варна"
-              onChange={(e) => setSelectedCityFrom(e.target.value)}
-            />
+            <Select value={selectedCityFrom} onValueChange={(value: string) => setSelectedCityFrom(value)}>
+              <SelectTrigger className="w-full border border-gray-300 rounded-xl">
+                <SelectValue placeholder="Изберете град" />
+              </SelectTrigger>
+              <SelectContent className="rounded-xl border-none">
+                <SelectGroup className="bg-gray-100">
+                  {cities.map((city, index) => (
+                    <SelectItem key={index} value={city} className="cursor-pointer hover:bg-gray-300">
+                      {city}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
-              className="cursor-pointer"
+              className="cursor-pointer w-4 h-4 rounded"
               defaultChecked={isAreaCity}
               onChange={(e) => setIsAreaCity(e.target.checked)}
             />
@@ -97,7 +106,7 @@ function Calculator() {
             <label className="block text-sm font-medium text-gray-700 mb-1">Брой палета</label>
             <input
               type="number"
-              className="w-full py-2 px-3  rounded-xl border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full py-2 px-3 rounded-xl border border-gray-300 shadow-sm"
               placeholder="например: 3"
               onChange={(e) => setNumberOfPallets(Math.floor(Number(e.target.value)))}
             />
@@ -107,7 +116,7 @@ function Calculator() {
             <label className="block text-sm font-medium text-gray-700 mb-1">Общо килограми</label>
             <input
               type="number"
-              className="w-full py-2 px-3  rounded-xl border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full py-2 px-3 rounded-xl border border-gray-300 shadow-sm"
               placeholder="например: 750"
               onChange={(e) => setKilograms(Number(e.target.value))}
             />
@@ -117,7 +126,7 @@ function Calculator() {
             <label className="block text-sm font-medium text-gray-700 mb-1">Височина на пале (см)</label>
             <input
               type="number"
-              className="w-full py-2 px-3  rounded-xl border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full py-2 px-3 rounded-xl border border-gray-300 shadow-sm focus:ring-2"
               placeholder="например: 180"
               onChange={(e) => setHightOfPallet(Number(e.target.value))}
             />
