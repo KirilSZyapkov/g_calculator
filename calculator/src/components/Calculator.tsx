@@ -12,6 +12,7 @@ function Calculator() {
   const [price, setPrice] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isAreaCity, setIsAreaCity] = useState<boolean>(false);
+  const [isPalletIndustrial, setIsPalletIndustrial] = useState<boolean>(false);
   const cities = Object.keys(data);
 
   useEffect(() => {
@@ -65,7 +66,7 @@ function Calculator() {
     };
 
     let toCity = data[selectedCityFrom as keyof typeof data]
-    setPrice(Number(toCity[quantity as keyof typeof toCity]));
+    setPrice((Number(toCity[quantity as keyof typeof toCity])*(isPalletIndustrial ? 1.1 : 1)).toFixed(2) as unknown as number);
     setIsLoading(false);
   }
 
@@ -111,6 +112,15 @@ function Calculator() {
               onChange={(e) => setNumberOfPallets(Math.floor(Number(e.target.value)))}
             />
           </div>
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              className="cursor-pointer w-4 h-4 rounded"
+              defaultChecked={isPalletIndustrial}
+              onChange={(e) => setIsPalletIndustrial(e.target.checked)}
+            />
+            <label className="block text-sm font-medium text-gray-700">скара</label>
+          </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Общо килограми</label>
@@ -150,7 +160,7 @@ function Calculator() {
       <div className="pt-6">
         <h2 className="text-2xl font-bold text-center mb-1">Цена на пратката</h2>
         <div className="bg-white shadow-2xl rounded-2xl p-6 w-full max-w-md text-center">
-          <p className="text-lg font-semibold">{price} лв</p>
+          <p className="text-lg font-semibold">{price} €</p>
         </div>
       </div>
     </div >
